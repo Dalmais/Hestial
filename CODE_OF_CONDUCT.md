@@ -1,0 +1,1 @@
+Be open, be nice and be curious 
