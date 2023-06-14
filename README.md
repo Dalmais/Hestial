@@ -1,13 +1,9 @@
-<p align="center"><img src="images/general/homebot_200.png"></p>
-
 <div align="center">
   <p>
     <h1>
       <a href="https://github.com/Dalmais/Housebot">
         <img src="images/general/homebot_200" alt="Homebot" />
       </a>
-      <br />
-      Homebot
     </h1>
     <h4>Next house management.</h4>
   </p>
