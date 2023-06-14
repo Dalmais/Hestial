@@ -1,4 +1,4 @@
-<p align="center"><img src="images/homebot.png"></p>
+<p align="center"><img src="images/general/homebot_200.png"></p>
 
 # Housebot
 This is a bunch of application/bot for the house management.
