@@ -5,10 +5,7 @@ project(Homegarden LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-file(GLOB SOURCE
-     "*.h"
-     "*.cpp"
-)
+file(GLOB SOURCE CONFIGURE_DEPENDS "*.h" "*.cpp")
 
 add_executable(Homegarden ${SOURCE})
 
