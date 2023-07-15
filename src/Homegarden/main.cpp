@@ -1,13 +1,11 @@
-// Copyright (c) 2023 Romain Damais (dalmais<at>gmail.com)
+// Copyright (c) 2023 Romain Damais <dalmais<at>gmail.com>
 // See end of file for extended copyright information
 
 #include <iostream>
 
-using namespace std;
-
 int main()
 {
-    cout << "Hello World!" << endl;
+    std::cout << "Hello World!" << std::endl;
     return 0;
 }
 
