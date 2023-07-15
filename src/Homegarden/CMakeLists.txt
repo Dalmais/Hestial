@@ -13,7 +13,7 @@ set(SOURCE
   PARENT_SCOPE
 )
 
-add_executable(Homegarden main.cpp)
+add_executable(Homegarden ${SOURCE})
 
 install(TARGETS Homegarden
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
