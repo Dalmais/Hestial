@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 file(GLOB SOURCE CONFIGURE_DEPENDS "*.h" "*.cpp")
 
-add_executable(Homegarden ${SOURCE})
+add_executable(main ${SOURCE})
 
 install(TARGETS Homegarden
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
