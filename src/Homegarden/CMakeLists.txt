@@ -4,6 +4,7 @@ project(Homegarden CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set_target_properties(Homegarden PROPERTIES LINKER_LANGUAGE CXX)
 
 file(GLOB SOURCE CONFIGURE_DEPENDS "*.h" "*.cpp")
 
