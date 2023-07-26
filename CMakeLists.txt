@@ -4,4 +4,4 @@ project(HouseBot)
 
 include(src/Homegarden/CMakeLists.txt)
 
-include(test/Homegarden/CMakeLists.txt)
+add_subdirectory(externals)

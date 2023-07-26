@@ -2,12 +2,18 @@
 // See end of file for extended copyright information
 
 #include <iostream>
+#include <gtest/gtest.h>
 
-int main()
-{
+int main(int argc,  char** argv){
     std::cout << "Hello World!" << std::endl;
     return 0;
 }
+
+TEST(TestTopic,TrivialEquality) {
+    EXPECT_EQ(main(), 0);
+}
+
+
 
 
 /*
