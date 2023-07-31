@@ -1,12 +1,12 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 
-project(Homegarden CXX)
+project(Homegarden LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
-include(CTest)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(SRCS 
-    ${PROJECT_SOURCE_DIR}/src/main.cpp
-    )
+enable_testing()
 
-add_executable(Homegarden ${SRCS})
+add_subdirectory(src)
+add_subdirectory(tests)

@@ -2,6 +2,6 @@ cmake_minimum_required(VERSION 3.10)
 
 project(HouseBot)
 
-add_subdirectory(externals)
+enable_testing()
 
-include(src/Homegarden/CMakeLists.txt)
+add_subdirectory(app/Homegarden)
