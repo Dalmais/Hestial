@@ -9,6 +9,8 @@ public:
     Command(const Command & other) : m_name(other.m_name){}
     Command(const std::string & name) : m_name(name){}
 
+    virtual ~Command(){}
+
     virtual std::string help() = 0;
     virtual bool execute(const std::string & input, std::string & error) = 0;
 
@@ -33,6 +35,8 @@ public:
     EnumCommand(const EnumCommand & other) : Command(other), m_values(other.m_values){}
     EnumCommand(const std::string & name, std::vector<EnumCmdItem> values) : Command(name), m_values(values){}
 
+    virtual ~EnumCommand(){}
+
     virtual std::string help();
     virtual bool execute(const std::string & input, std::string & error);
     virtual std::string value();
@@ -50,9 +54,11 @@ public:
     StringCommand(const StringCommand & other) : Command(other), m_text(other.m_text){}
     StringCommand(const std::string & name, std::string & text, uint32_t size = 32) : Command(name), m_text(text), m_maxSize(size){}
 
+    virtual ~StringCommand(){}
+
     virtual std::string help();
     virtual bool execute(const std::string & input, std::string & error);
-    virtual std::string value(){return m_text;}
+    virtual std::string value();
 
 private:
     std::string & m_text;
@@ -63,6 +69,8 @@ class NumberCommand : public Command{
 public:
     NumberCommand(const NumberCommand & other): Command(other), m_numbers(other.m_numbers), m_separator(other.m_separator){}
     NumberCommand(const std::string & name, const std::vector<std::string> & str_numbers);
+
+    virtual ~NumberCommand(){}
 
     virtual std::string help();
     virtual bool execute(const std::string & input, std::string & error);
@@ -78,6 +86,8 @@ public:
 
     OnOffCommand(const OnOffCommand & other): EnumCommand(other), m_value(other.m_value), m_items(other.m_items){}
     OnOffCommand(const std::string & name, bool & value);
+
+    virtual ~OnOffCommand(){}
 
     static const uint8_t NB_ITEM = 2;
 
@@ -95,6 +105,8 @@ class ActionCommand : public EnumCommand{
 public:
     ActionCommand(const ActionCommand & other): EnumCommand(other), m_items(other.m_items){}
     ActionCommand(const std::string & name);
+
+    virtual ~ActionCommand(){}
 
     virtual std::string value(){return "UNDEF";}
 

@@ -9,6 +9,8 @@ public:
         m_items.push_back(EnumCmdItem{"test3", 2, true});
     }
 
+    virtual ~testEnum(){}
+
     bool setValue(const uint32_t idx){
         if((idx != -1 ) && (idx != 1 ) && (idx != 2 )){
             return false;
@@ -80,6 +82,8 @@ class testAction : public ActionCommand{
     public:
     testAction(const testAction & other) : ActionCommand(other){}
     testAction(const std::string & name) : ActionCommand(name){}
+
+    virtual ~testAction(){}
 
 protected:
     virtual bool doAction(){return return_true();}

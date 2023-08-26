@@ -9,7 +9,7 @@ FetchContent_MakeAvailable(googletest)
 add_library(GTest::GTest INTERFACE IMPORTED)
 target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
-add_executable(commands_test commands_test.cpp)
+add_executable(commands_test commands_test.cpp ../src/commands.cpp)
 
 target_include_directories(commands_test PUBLIC ../src)
 

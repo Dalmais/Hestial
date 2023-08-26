@@ -29,6 +29,7 @@ bool EnumCommand::execute(const std::string & input, std::string & error){
         it++;
     }
     error = "Invalid value";
+    return false;
 }
 
 std::string EnumCommand::value(){
@@ -49,6 +50,11 @@ std::string EnumCommand::value(){
 }
 
 // STRING
+
+std::string StringCommand::help(){
+    return name() + " [STR(" + std::to_string(m_maxSize) + ")]"; 
+}
+
 bool StringCommand::execute(const std::string & input, std::string & error){
     if(input.size() > m_maxSize){
         error = "Too big input size";
@@ -67,12 +73,20 @@ std::string StringCommand::value(){
 }
 
 // NUMBER
- NumberCommand::NumberCommand(const std::string & name, const std::vector<std::string> & str_numbers) : Command(name){
+NumberCommand::NumberCommand(const std::string & name, const std::vector<std::string> & str_numbers) : Command(name){
 
- }
+}
+
+std::string NumberCommand::help(){
+    return name() + "[NUM]";
+}
 
 bool NumberCommand::execute(const std::string & input, std::string & error){
+    return false;
+}
 
+std::string NumberCommand::value(){
+    return "12";
 }
 
 // ON/OFF 
@@ -87,11 +101,7 @@ bool OnOffCommand::setValue(const uint32_t idx){
     }else if(idx == 1){
         m_value = true;
     }
-    return ;
-}
-
-int OnOffCommand::getValue(){
-
+    return false;
 }
 
 // ACTION
