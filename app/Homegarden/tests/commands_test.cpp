@@ -48,7 +48,7 @@ TEST(CommandsTests, TestStringCommand_1)
     std::string myString3 = "myString3";
     StringCommand cmd1("test", myString);
     StringCommand cmd2("test2", myString);
-    StringCommand cmd3("test3", myString3);
+    StringCommand cmd3(cmd1);
 
     const auto name1 = cmd1.name();
     const auto name2 = cmd2.name();
@@ -64,7 +64,7 @@ TEST(CommandsTests, TestOnOffommand_1)
     bool test3 = false;
     OnOffCommand cmd1("test", test);
     OnOffCommand cmd2("test2", test);
-    OnOffCommand cmd3("test3", test3);
+    OnOffCommand cmd3(cmd1);
 
     const auto name1 = cmd1.name();
     const auto name2 = cmd2.name();
@@ -93,7 +93,7 @@ TEST(CommandsTests, TestActionCommand_1)
 {
     testAction cmd1("test");
     testAction cmd2("test2");
-    testAction cmd3("test3");
+    testAction cmd3(cmd1);
 
     const auto name1 = cmd1.name();
     const auto name2 = cmd2.name();
