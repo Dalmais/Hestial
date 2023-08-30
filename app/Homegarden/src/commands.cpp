@@ -57,7 +57,7 @@ std::string StringCommand::help(){
 
 bool StringCommand::execute(const std::string & input, std::string & error){
     if(input.size() > m_maxSize){
-        error = "Too big input size";
+        error = "Input size too big";
         return false;
     }
     m_text = input;

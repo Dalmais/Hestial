@@ -8,7 +8,6 @@ public:
         m_values.push_back(EnumCmdItem{"test1", -1, true});
         m_values.push_back(EnumCmdItem{"test2", 1, true});
         m_values.push_back(EnumCmdItem{"test3", 2, true});
-        
     }
 
     virtual ~testEnum(){}
@@ -47,7 +46,7 @@ TEST(CommandsTests, TestEnumCommand_1)
     ASSERT_EQ("test1", cmd1.value());
     ASSERT_EQ("", err);
 
-     res = cmd1.execute("test2", err);
+    res = cmd1.execute("test2", err);
     ASSERT_EQ(true, res);
     ASSERT_EQ(1, cmd1.getValue());
     ASSERT_EQ("test2", cmd1.value());
@@ -89,26 +88,42 @@ TEST(CommandsTests, TestEnumCommand_1)
     cmd1.setValue(3);
     ASSERT_EQ(2, cmd1.getValue());
     ASSERT_EQ("test3", cmd1.value());
-    ASSERT_FALSE(cmd1.isValid());
-     
+    ASSERT_FALSE(cmd1.isValid());   
 }
-/*
+
 TEST(CommandsTests, TestStringCommand_1)
 {
     std::string myString = "myString";
     std::string myString3 = "myString3";
-    StringCommand cmd1("test", myString);
-    StringCommand cmd2("test2", myString);
-    StringCommand cmd3("test3", myString3);
+    StringCommand cmd1("testString1", myString);
+    StringCommand cmd2(cmd1);
 
-    const auto value1 = cmd1.value();
-    const auto value2 = cmd2.value();
-    const auto value3 = cmd3.value();
-    ASSERT_EQ("myString", value1);
-    ASSERT_EQ(value1, value2);
-    ASSERT_NE(value1, value3);
+//test name
+    ASSERT_EQ("testString1", cmd1.name());
+    ASSERT_EQ(cmd1.name(), cmd2.name());
+
+
+
+//test execute
+    std::string err;
+    bool res = cmd1.execute("", err);
+    ASSERT_EQ(true, res);
+    ASSERT_EQ("UNDEFINED", cmd1.value());
+    ASSERT_EQ("", err);
+
+    StringCommand cmd3("mine", myString3, 6);
+    res = cmd3.execute("test2", err);
+    ASSERT_EQ(true, res);
+    ASSERT_EQ("test2", cmd3.value());
+    ASSERT_EQ("", err);
+
+    res = cmd3.execute("testtroplong", err);
+    ASSERT_EQ(false, res);
+    ASSERT_EQ("test2", cmd3.value());
+    ASSERT_EQ("Input size too big", err);
+
 }
-
+/*
 TEST(CommandsTests, TestOnOffommand_1)
 {
     bool test = false;
