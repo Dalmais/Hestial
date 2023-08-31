@@ -33,7 +33,7 @@ public:
     }; 
 
     EnumCommand(const EnumCommand & other) : Command(other), m_values(other.m_values){}
-    EnumCommand(const std::string & name, std::vector<EnumCmdItem> values) : Command(name), m_values(values){}
+    EnumCommand(const std::string & name) : Command(name){}
 
     virtual ~EnumCommand(){}
 
@@ -45,7 +45,6 @@ protected:
     virtual bool setValue(const uint32_t idx) = 0;
     virtual int getValue() = 0;
 
-private:
     std::vector<EnumCmdItem> m_values;
 };
 
@@ -84,7 +83,7 @@ private:
 class OnOffCommand : public EnumCommand{
 public:
 
-    OnOffCommand(const OnOffCommand & other): EnumCommand(other), m_value(other.m_value), m_items(other.m_items){}
+    OnOffCommand(const OnOffCommand & other): EnumCommand(other), m_state(other.m_state){}
     OnOffCommand(const std::string & name, bool & value);
 
     virtual ~OnOffCommand(){}
@@ -93,17 +92,16 @@ public:
 
 protected:
     virtual bool setValue(const uint32_t idx);
-    virtual int getValue(){return m_value ? m_items[1].value : m_items[0].value;}
+    virtual int getValue(){return m_state ? m_values[1].value : m_values[0].value;}
 
 private:
 
-    bool & m_value;
-    std::vector<EnumCmdItem> m_items;
+    bool & m_state;
 };
 
 class ActionCommand : public EnumCommand{
 public:
-    ActionCommand(const ActionCommand & other): EnumCommand(other), m_items(other.m_items){}
+    ActionCommand(const ActionCommand & other): EnumCommand(other){}
     ActionCommand(const std::string & name);
 
     virtual ~ActionCommand(){}
@@ -114,8 +112,7 @@ protected:
     virtual bool setValue(const uint32_t idx);
     virtual int getValue(){return 0;}
     virtual bool doAction() = 0;
-private:
-    std::vector<EnumCmdItem> m_items;
+
 };
 
 
