@@ -90,23 +90,23 @@ std::string NumberCommand::value(){
 }
 
 // ON/OFF 
-OnOffCommand::OnOffCommand(const std::string & name, bool & value) : EnumCommand(name, m_items), m_value(value){
-    m_items.push_back(EnumCmdItem{"OFF", 0, true});       
-    m_items.push_back(EnumCmdItem{"ON", 1, true});
+OnOffCommand::OnOffCommand(const std::string & name, bool & value) : EnumCommand(name), m_state(value){
+    m_values.push_back(EnumCmdItem{"OFF", 0, true});       
+    m_values.push_back(EnumCmdItem{"ON", 1, true});
 }
 
 bool OnOffCommand::setValue(const uint32_t idx){
     if(idx == 0){
-        m_value = false;
+        m_state = false;
     }else if(idx == 1){
-        m_value = true;
+        m_state = true;
     }
     return false;
 }
 
 // ACTION
-ActionCommand::ActionCommand(const std::string & name) : EnumCommand(name, m_items){
-    m_items.push_back(EnumCmdItem{"APPLY", 1, true});  
+ActionCommand::ActionCommand(const std::string & name) : EnumCommand(name){
+    m_values.push_back(EnumCmdItem{"APPLY", 1, true});  
 }
 
  bool ActionCommand::setValue(const uint32_t idx){
