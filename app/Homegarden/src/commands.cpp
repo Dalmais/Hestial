@@ -2,14 +2,15 @@
 
 // ENUM
 std::string EnumCommand::help(){
-    std::string help_cmd = name() + "[";
+    std::string help_cmd = name() + " [ENUM";
     auto it = m_values.begin();
     while(it != m_values.end()){
         if(it->available){
-            help_cmd += " " + it->name; 
+            help_cmd += " [" + it->name + "]"; 
         }else{
             help_cmd += " (" + it->name + ")"; 
         }
+        it++;
     }
     return help_cmd + "]";
 }

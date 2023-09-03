@@ -7,7 +7,7 @@ public:
         
         m_values.push_back(EnumCmdItem{"test1", -1, true});
         m_values.push_back(EnumCmdItem{"test2", 1, true});
-        m_values.push_back(EnumCmdItem{"test3", 2, true});
+        m_values.push_back(EnumCmdItem{"test3", 2, false});
     }
 
     virtual ~testEnum(){}
@@ -37,6 +37,9 @@ TEST(CommandsTests, TestEnumCommand_1)
     ASSERT_EQ("testEnum1", cmd1.name());
     ASSERT_EQ(cmd1.name(), cmd2.name());
 
+// test help
+    ASSERT_EQ("testEnum1 [ENUM [test1] [test2] (test3)]", cmd1.help());
+
 //test execute
     testEnum cmd3("mine");
     std::string err;
@@ -52,16 +55,16 @@ TEST(CommandsTests, TestEnumCommand_1)
     ASSERT_EQ("test2", cmd1.value());
     ASSERT_EQ("", err);
 
-     res = cmd1.execute("test3", err);
-    ASSERT_EQ(true, res);
-    ASSERT_EQ(2, cmd1.getValue());
-    ASSERT_EQ("test3", cmd1.value());
-    ASSERT_EQ("", err);
-
-     res = cmd1.execute("", err);
+    res = cmd1.execute("test3", err);
     ASSERT_EQ(false, res);
-    ASSERT_EQ(2, cmd1.getValue());
-    ASSERT_EQ("test3", cmd1.value());
+    ASSERT_EQ(1, cmd1.getValue());
+    ASSERT_EQ("test2", cmd1.value());
+    ASSERT_EQ("value is not available", err);
+
+    res = cmd1.execute("", err);
+    ASSERT_EQ(false, res);
+    ASSERT_EQ(1, cmd1.getValue());
+    ASSERT_EQ("test2", cmd1.value());
     ASSERT_EQ("Invalid value", err);
 
 //test set value
@@ -82,12 +85,12 @@ TEST(CommandsTests, TestEnumCommand_1)
 
     cmd1.setValue(2);
     ASSERT_EQ(2, cmd1.getValue());
-    ASSERT_EQ("test3", cmd1.value());
-    ASSERT_TRUE(cmd1.isValid());
+    ASSERT_EQ("UNAVAILABLE", cmd1.value());
+    ASSERT_FALSE(cmd1.isValid());
     
     cmd1.setValue(3);
     ASSERT_EQ(2, cmd1.getValue());
-    ASSERT_EQ("test3", cmd1.value());
+    ASSERT_EQ("UNAVAILABLE", cmd1.value());
     ASSERT_FALSE(cmd1.isValid());   
 }
 
@@ -102,7 +105,8 @@ TEST(CommandsTests, TestStringCommand_1)
     ASSERT_EQ("testString1", cmd1.name());
     ASSERT_EQ(cmd1.name(), cmd2.name());
 
-
+// test help
+    ASSERT_EQ("testString1 [STR(32)]", cmd1.help());
 
 //test execute
     std::string err;
@@ -123,23 +127,18 @@ TEST(CommandsTests, TestStringCommand_1)
     ASSERT_EQ("Input size too big", err);
 
 }
-/*
+
 TEST(CommandsTests, TestOnOffommand_1)
 {
     bool test = false;
-    bool test3 = false;
     OnOffCommand cmd1("test", test);
-    OnOffCommand cmd2("test2", test);
-    OnOffCommand cmd3("test3", test3);
+    OnOffCommand cmd2(cmd1);
 
-    const auto name1 = cmd1.name();
-    const auto name2 = cmd2.name();
-    const auto name3 = cmd3.name();
-    ASSERT_EQ("test", name1);
-    ASSERT_EQ(name1, name3);
-    ASSERT_NE(name1, name2);
+// name
+    ASSERT_EQ("test", cmd1.name());
+    ASSERT_EQ(cmd1.name(), cmd2.name());
 }
-
+/*
 static bool return_true(){
     return true;
 }
