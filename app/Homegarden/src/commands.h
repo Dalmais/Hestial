@@ -67,7 +67,7 @@ private:
 class NumberCommand : public Command{
 public:
     NumberCommand(const NumberCommand & other): Command(other), m_numbers(other.m_numbers), m_separator(other.m_separator){}
-    NumberCommand(const std::string & name, const std::vector<std::string> & str_numbers);
+    NumberCommand(const std::string & name, const std::vector<std::string> & numbers, const std::string & separator = ".");
 
     virtual ~NumberCommand(){}
 
@@ -76,7 +76,7 @@ public:
     virtual std::string value();
 
 private:
-    std::vector<double> m_numbers;
+    std::vector<std::string> m_numbers;
     std::string m_separator;
 };
 

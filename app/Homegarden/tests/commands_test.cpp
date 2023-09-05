@@ -204,3 +204,21 @@ TEST(CommandsTests, TestActionCommand_1)
     ASSERT_EQ("UNDEFINED", cmd1.value());
     ASSERT_EQ("", err);
 }
+
+TEST(CommandsTests, TestNumberCommand_1)
+{
+    std::vector<std::string> str_numbers;
+    str_numbers.push_back("DEC");
+    str_numbers.push_back("DEC");
+    str_numbers.push_back("HEX");
+    str_numbers.push_back("HEX");
+    NumberCommand cmd1("testNumber", str_numbers);
+    NumberCommand cmd2(cmd1);
+
+// name
+    ASSERT_EQ("testNumber", cmd1.name());
+    ASSERT_EQ(cmd1.name(), cmd2.name());
+
+// test help
+    ASSERT_EQ("testNumber [NUM DEC.DEC.HEX.HEX]", cmd1.help());
+}

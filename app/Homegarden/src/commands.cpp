@@ -76,12 +76,21 @@ std::string StringCommand::value(){
 }
 
 // NUMBER
-NumberCommand::NumberCommand(const std::string & name, const std::vector<std::string> & str_numbers) : Command(name){
+NumberCommand::NumberCommand(const std::string & name, const std::vector<std::string> & numbers, const std::string & separator) : 
+    Command(name), m_numbers(numbers), m_separator(separator){
 
 }
 
 std::string NumberCommand::help(){
-    return name() + "[NUM]";
+    std::string ret = name() + " [NUM ";
+    for(int i=0; i<m_numbers.size(); i++){
+        ret += m_numbers[i];
+        if(i < m_numbers.size()-1){
+            ret += m_separator;
+        }
+    }
+    ret += "]";
+    return ret;
 }
 
 bool NumberCommand::execute(const std::string & input, std::string & error){
