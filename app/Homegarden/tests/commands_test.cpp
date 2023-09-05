@@ -44,25 +44,25 @@ TEST(CommandsTests, TestEnumCommand_1)
     testEnum cmd3("mine");
     std::string err;
     bool res = cmd1.execute("test1", err);
-    ASSERT_EQ(true, res);
+    ASSERT_TRUE(res);
     ASSERT_EQ(-1, cmd1.getValue());
     ASSERT_EQ("test1", cmd1.value());
     ASSERT_EQ("", err);
 
     res = cmd1.execute("test2", err);
-    ASSERT_EQ(true, res);
+    ASSERT_TRUE(res);
     ASSERT_EQ(1, cmd1.getValue());
     ASSERT_EQ("test2", cmd1.value());
     ASSERT_EQ("", err);
 
     res = cmd1.execute("test3", err);
-    ASSERT_EQ(false, res);
+    ASSERT_FALSE(res);
     ASSERT_EQ(1, cmd1.getValue());
     ASSERT_EQ("test2", cmd1.value());
     ASSERT_EQ("value is not available", err);
 
     res = cmd1.execute("", err);
-    ASSERT_EQ(false, res);
+    ASSERT_FALSE(res);
     ASSERT_EQ(1, cmd1.getValue());
     ASSERT_EQ("test2", cmd1.value());
     ASSERT_EQ("Invalid value", err);
@@ -111,18 +111,18 @@ TEST(CommandsTests, TestStringCommand_1)
 //test execute
     std::string err;
     bool res = cmd1.execute("", err);
-    ASSERT_EQ(true, res);
+    ASSERT_TRUE(res);
     ASSERT_EQ("UNDEFINED", cmd1.value());
     ASSERT_EQ("", err);
 
     StringCommand cmd3("mine", myString3, 6);
     res = cmd3.execute("test2", err);
-    ASSERT_EQ(true, res);
+    ASSERT_TRUE(res);
     ASSERT_EQ("test2", cmd3.value());
     ASSERT_EQ("", err);
 
     res = cmd3.execute("testtroplong", err);
-    ASSERT_EQ(false, res);
+    ASSERT_FALSE(res);
     ASSERT_EQ("test2", cmd3.value());
     ASSERT_EQ("Input size too big", err);
 
@@ -131,24 +131,47 @@ TEST(CommandsTests, TestStringCommand_1)
 TEST(CommandsTests, TestOnOffommand_1)
 {
     bool test = false;
-    OnOffCommand cmd1("test", test);
+    OnOffCommand cmd1("testOnOff", test);
     OnOffCommand cmd2(cmd1);
 
 // name
-    ASSERT_EQ("test", cmd1.name());
+    ASSERT_EQ("testOnOff", cmd1.name());
     ASSERT_EQ(cmd1.name(), cmd2.name());
+
+// test help
+    ASSERT_EQ("testOnOff [ENUM [OFF] [ON]]", cmd1.help());
+
+//test execute
+    std::string err;
+    bool res = cmd1.execute("ON", err);
+    ASSERT_TRUE(res);
+    ASSERT_EQ("ON", cmd1.value());
+    ASSERT_EQ("", err);
+    
+    res = cmd1.execute("OFF", err);
+    ASSERT_TRUE(res);
+    ASSERT_EQ("OFF", cmd1.value());
+    ASSERT_EQ("", err);
+    
+    res = cmd1.execute("BAD", err);
+    ASSERT_FALSE(res);
+    ASSERT_EQ("OFF", cmd1.value());
+    ASSERT_EQ("Invalid value", err);
+
 }
-/*
+
+static bool value_test = false;
 static bool return_true(){
+    value_test = true;
     return true;
 }
 
-class testAction : public ActionCommand{
+class TestAction : public ActionCommand{
     public:
-    testAction(const testAction & other) : ActionCommand(other){}
-    testAction(const std::string & name) : ActionCommand(name){}
+    TestAction(const TestAction & other) : ActionCommand(other){}
+    TestAction(const std::string & name) : ActionCommand(name){}
 
-    virtual ~testAction(){}
+    virtual ~TestAction(){}
 
 protected:
     virtual bool doAction(){return return_true();}
@@ -156,15 +179,28 @@ protected:
 
 TEST(CommandsTests, TestActionCommand_1)
 {
-    testAction cmd1("test");
-    testAction cmd2("test2");
-    testAction cmd3("test3");
+    TestAction cmd1("testAction");
+    TestAction cmd2(cmd1);
 
-    const auto name1 = cmd1.name();
-    const auto name2 = cmd2.name();
-    const auto name3 = cmd3.name();
-    ASSERT_EQ("test", name1);
-    ASSERT_EQ(name1, name3);
-    ASSERT_NE(name1, name2);
+// name
+    ASSERT_EQ("testAction", cmd1.name());
+    ASSERT_EQ(cmd1.name(), cmd2.name());
+
+// test help
+    ASSERT_EQ("testAction [ENUM [APPLY]]", cmd1.help());
+
+//test execute
+    std::string err;
+    
+    bool res = cmd1.execute("BAD", err);
+    ASSERT_FALSE(res);
+    ASSERT_FALSE(value_test);
+    ASSERT_EQ("UNDEFINED", cmd1.value());
+    ASSERT_EQ("Invalid value", err);
+
+    res = cmd1.execute("APPLY", err);
+    ASSERT_TRUE(res);
+    ASSERT_TRUE(value_test);
+    ASSERT_EQ("UNDEFINED", cmd1.value());
+    ASSERT_EQ("", err);
 }
-*/

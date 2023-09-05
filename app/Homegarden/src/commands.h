@@ -106,7 +106,7 @@ public:
 
     virtual ~ActionCommand(){}
 
-    virtual std::string value(){return "UNDEF";}
+    virtual std::string value(){return "UNDEFINED";}
 
 protected:
     virtual bool setValue(const uint32_t idx);

@@ -17,6 +17,7 @@ std::string EnumCommand::help(){
 
 bool EnumCommand::execute(const std::string & input, std::string & error){
     auto it = m_values.begin();
+    error.clear();
 
     while(it !=  m_values.end()){
         if(it->name == input){
@@ -57,6 +58,7 @@ std::string StringCommand::help(){
 }
 
 bool StringCommand::execute(const std::string & input, std::string & error){
+    error.clear();
     if(input.size() > m_maxSize){
         error = "Input size too big";
         return false;
@@ -101,8 +103,10 @@ bool OnOffCommand::setValue(const uint32_t idx){
         m_state = false;
     }else if(idx == 1){
         m_state = true;
+    }else{
+        return false;
     }
-    return false;
+    return true;
 }
 
 // ACTION
