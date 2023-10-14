@@ -2,9 +2,46 @@
 // See end of file for extended copyright information
 
 #include <iostream>
+#include "commands.h"
+
+class TestNumber: public NumberCommand{
+    public:
+    TestNumber(const TestNumber & other) : NumberCommand(other){}
+    TestNumber(const std::string & name) : NumberCommand(name){
+        m_separator = ";";
+        m_precision = 1;
+        m_numbers.push_back(DefinitionNumber(255, 0, 1, DEC));
+        m_numbers.push_back(DefinitionNumber(0, -255, 1, DEC));
+        m_numbers.push_back(DefinitionNumber(0xFF, 0, 1, HEX));
+        m_numbers.push_back(DefinitionNumber(42.0, 0.0, 1.2, FLOAT));
+        m_numbers.push_back(DefinitionNumber(-1.0, -42.0, 1.3, FLOAT));
+        m_values = {0.0,0.0,0.0,0.0,0.0};
+    }
+
+    virtual ~TestNumber(){}
+
+protected:
+    virtual std::vector<double> getValue(){
+        return m_values;
+    }
+    virtual void setValue(std::vector<double> value){
+        m_values = value;
+    }
+
+private:
+    std::vector<double> m_values;
+};
 
 int main(int argc,  char** argv){
     std::cout << "Hello World!" << std::endl;
+
+
+
+    TestNumber cmd1("testNumber");
+    std::string err;
+    bool ret = cmd1.execute("192;-123;0xdd;21.3;-11.85", err) ;
+    std::cout << "retour:" << ret  << " value:" << cmd1.value() << " err: " << err << std::endl;
+
     return 0;
 }
 

@@ -66,18 +66,44 @@ private:
 
 class NumberCommand : public Command{
 public:
-    NumberCommand(const NumberCommand & other): Command(other), m_numbers(other.m_numbers), m_separator(other.m_separator){}
-    NumberCommand(const std::string & name, const std::vector<std::string> & numbers, const std::string & separator = ".");
+
+    enum IntType{
+        DEC=0,
+        HEX,
+        FLOAT
+    };
+
+    struct DefinitionNumber{
+        double max;
+        double min;
+        double step;
+        IntType type;
+        DefinitionNumber(double ma, double mi, double s, IntType t) : max(ma),min(mi), step(s), type(t){}
+        DefinitionNumber(int ma, int mi, int s, IntType t): max((double)ma),min((double)mi), step((double)s), type(t){}
+
+    };
+    NumberCommand(const NumberCommand & other) : 
+        Command(other), m_numbers(other.m_numbers), m_separator(other.m_separator), m_precision(other.m_precision){}
+    NumberCommand(const std::string & name);
 
     virtual ~NumberCommand(){}
 
     virtual std::string help();
     virtual bool execute(const std::string & input, std::string & error);
     virtual std::string value();
+    virtual void setSeparator(std::string s){m_separator = s;}
+    virtual void setPrecision(uint32_t p){m_precision = p;}
+
+protected:
+    virtual std::vector<double> getValue() = 0;
+    virtual void setValue(std::vector<double> value) = 0;
+
+    std::vector<DefinitionNumber> m_numbers;
+    std::string m_separator;
+    uint32_t m_precision;
 
 private:
-    std::vector<std::string> m_numbers;
-    std::string m_separator;
+    uint32_t numberSize(int32_t number);
 };
 
 class OnOffCommand : public EnumCommand{
