@@ -103,6 +103,9 @@ protected:
     uint32_t m_precision;
 
 private:
+// returns count of non-overlapping occurrences of 'sub' in 'str'
+    int countSubstring(const std::string& str, const std::string& sub);
+
     uint32_t numberSize(int32_t number);
 };
 

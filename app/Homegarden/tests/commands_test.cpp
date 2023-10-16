@@ -246,21 +246,21 @@ TEST(CommandsTests, TestNumberCommand_1)
 
 //test execute
     std::string err;
-    
+
     bool res = cmd1.execute("192;-123;0xdd;21.3;", err);
     ASSERT_FALSE(res);
     ASSERT_EQ("INVALID", cmd1.value());
-    ASSERT_EQ("Bad parameters number: 4/5", err);
+    ASSERT_EQ("Invalid value : ''", err);
 
     res = cmd1.execute("192;-123;0xdd;21.3;1.5;77", err);
     ASSERT_FALSE(res);
     ASSERT_EQ("INVALID", cmd1.value());
-    ASSERT_EQ("Bad parameters number: 6/5", err);
+    ASSERT_EQ("Too many values: 6/5", err);
 
     res = cmd1.execute("192;-123;ddd;21.4;-24.2", err);
     ASSERT_FALSE(res);
     ASSERT_EQ("INVALID", cmd1.value());
-    ASSERT_EQ("Invalid value", err);
+    ASSERT_EQ("Invalid value : 'ddd'", err);
 
     res = cmd1.execute("192;-123;0xdd;21.3;-11.85", err);
     ASSERT_TRUE(res);

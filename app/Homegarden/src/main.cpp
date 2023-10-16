@@ -40,7 +40,8 @@ int main(int argc,  char** argv){
     TestNumber cmd1("testNumber");
     std::string err;
     bool ret = cmd1.execute("192;-123;0xdd;21.3;-11.85", err) ;
-    std::cout << "retour:" << ret  << " value:" << cmd1.value() << " err: " << err << std::endl;
+    std::cout << "retour:" << ret  << " value:" << cmd1.value() << std::endl;
+    std::cout << "err: " << err << std::endl;
 
     return 0;
 }

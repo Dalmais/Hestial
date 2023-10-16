@@ -1,5 +1,6 @@
 #include "commands.h"
 
+#include <algorithm>
 #include <stdexcept>
 #include <sstream>
 #include <iostream>
@@ -142,56 +143,82 @@ std::string NumberCommand::help(){
     return ret.str();
 }
 
+// returns count of non-overlapping occurrences of 'sub' in 'str'
+int NumberCommand::countSubstring(const std::string& str, const std::string& sub)
+{
+    if (sub.length() == 0) return 0;
+    int count = 0;
+    for (size_t offset = str.find(sub); offset != std::string::npos;
+     offset = str.find(sub, offset + sub.length()))
+    {
+        ++count;
+    }
+    return count;
+}
+
 bool NumberCommand::execute(const std::string & input, std::string & error){
 
     size_t pos=0, rpos = 0;
-    std::vector<double> value;
+    std::vector<double> values;
+    error.clear();
+
+    auto count = countSubstring(input, m_separator);
+    if (count+1 > m_numbers.size()){
+        error = "Too many values: " + std::to_string(count+1) + "/" + std::to_string(m_numbers.size());
+        return false;
+    }
+    if (count+1 < m_numbers.size()){
+        error = "Not enough values: " + std::to_string(count+1) + "/" + std::to_string(m_numbers.size());
+        return false;
+    }
 
 //    std::cout << input << std::endl; 
     for(int i=0; i<m_numbers.size(); i++){
+        std::string strvalue;
         try{
 
-            pos = input.find(m_separator, rpos+1);
-            bool lastElem = (i+1 == m_numbers.size()) ;
+            pos = input.find(m_separator, rpos);
             bool noSeparator = (pos == std::string::npos);
-            int s = input.size();
-            bool lastValueMissing = (rpos+1 >= s);
 
-            if (lastValueMissing){
-                error = "Bad parameters number: " + std::to_string(i) + "/" + std::to_string(m_numbers.size());
-                return false;
+            //if first elem then start is rpo
+            int valueidx = rpos==0?rpos:rpos+1;
+            int valuesize = noSeparator?input.size()-rpos:pos-rpos;
+            strvalue = input.substr(rpos, valuesize);
+            double value = 0.0;
+            
+            if(strvalue.size()>2 && \
+              ((strvalue.substr(0,2) == "0x") || strvalue.substr(0,2) == "0X")){
+                value = std::stol(strvalue, 0, 16);
+            }else{
+                value = std::stod(strvalue);
+            }
+            if(m_numbers[i].max < value){
+                throw std::out_of_range("Too big");
+            }
+            if(m_numbers[i].min > value){
+                throw std::out_of_range("Too small");
             }
 
-            if ((lastElem) && (!noSeparator)){
-                error = "Bad parameters number: " + std::to_string(m_numbers.size()+1) + "/" + std::to_string(m_numbers.size());
-                return false;
-            }
-
-            if ((!lastElem) && (noSeparator)){
-                error = "Bad parameters number: " + std::to_string(i+1) + "/" + std::to_string(m_numbers.size());
-                return false;
-            }
-
-//            std::cout << input.substr(rpos==0?rpos:rpos+1, noSeparator?input.size()-rpos:pos-rpos-1) << std::endl;
-            value.push_back(std::stod(input.substr(rpos==0?rpos:rpos+1, noSeparator?input.size()-rpos:pos-rpos-1)));
-            rpos = pos;
+            values.push_back(value);
         }
         catch(std::invalid_argument const& ){
-            error = "Invalid value";
+            error = "Invalid value : '" + strvalue + "'";
             return false;
 
         }
         catch(std::out_of_range const& ){
-            error = "Argument out of range";
+            error = "Argument out of range : '" + strvalue + "'";
             return false;
         }
         catch(std::exception& ){
-            error = "Bad format";
+            error = "Bad format : '" + strvalue + "'";
             return false;
         }
+        
+        rpos = pos+1;
     }
 
-    setValue(value);
+    setValue(values);
     return true;
 }
 
@@ -203,6 +230,10 @@ std::string NumberCommand::value(){
 
     std::stringstream ret;
     std::vector<double> value = getValue();
+
+    if(value.size() != m_numbers.size()){
+        return "INVALID";
+    }
 
     for(int i=0; i<m_numbers.size(); i++){
         if(i>0){
@@ -222,17 +253,14 @@ std::string NumberCommand::value(){
 
         if(m_numbers[i].type == HEX){
             ret << std::hex << std::nouppercase;
-            if(currentvalue == 0){
-                ret << "0x"; // https://bugzilla.redhat.com/show_bug.cgi?id=166735 
-            } 
-            ret << std::round(currentvalue);
+            ret << "0x" << static_cast<int>(std::round(currentvalue));
         }else if(m_numbers[i].type == DEC){
             ret << std::dec << std::round(currentvalue);
         }else if(m_numbers[i].type == FLOAT){
             ret << std::dec << std::setprecision(m_precision) << std::fixed << currentvalue;
         }
-
     }
+
     return ret.str();
 }
 
