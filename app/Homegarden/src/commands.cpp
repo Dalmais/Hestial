@@ -7,6 +7,8 @@
 #include <cmath>
 #include <iomanip>
 
+namespace rd{
+
 // ENUM
 std::string EnumCommand::help(){
     std::string help_cmd = name() + " [ENUM";
@@ -286,9 +288,11 @@ ActionCommand::ActionCommand(const std::string & name) : EnumCommand(name){
     m_values.push_back(EnumCmdItem{"APPLY", 1, true});  
 }
 
- bool ActionCommand::setValue(const uint32_t idx){
+bool ActionCommand::setValue(const uint32_t idx){
     if(idx == 1){
         return doAction();
     }
     return false;
- }
+}
+
+}; //namespace rd

@@ -1,6 +1,8 @@
 #include <commands.h>
 #include <gtest/gtest.h>
 
+namespace rd{
+
 class testEnum : public EnumCommand{
 public:
     testEnum(const std::string & name) : EnumCommand(name), m_idx(0){
@@ -28,10 +30,12 @@ private:
     int m_idx;
 };
 
+};
+
 TEST(CommandsTests, TestEnumCommand_1)
 {
-    testEnum cmd1("testEnum1");
-    testEnum cmd2(cmd1);
+    rd::testEnum cmd1("testEnum1");
+    rd::testEnum cmd2(cmd1);
 
 //test name
     ASSERT_EQ("testEnum1", cmd1.name());
@@ -41,7 +45,7 @@ TEST(CommandsTests, TestEnumCommand_1)
     ASSERT_EQ("testEnum1 [ENUM [test1] [test2] (test3)]", cmd1.help());
 
 //test execute
-    testEnum cmd3("mine");
+    rd::testEnum cmd3("mine");
     std::string err;
     bool res = cmd1.execute("test1", err);
     ASSERT_TRUE(res);
@@ -94,12 +98,14 @@ TEST(CommandsTests, TestEnumCommand_1)
     ASSERT_FALSE(cmd1.isValid());   
 }
 
+namespace rd{
+
 TEST(CommandsTests, TestStringCommand_1)
 {
     std::string myString = "myString";
     std::string myString3 = "myString3";
-    StringCommand cmd1("testString1", myString);
-    StringCommand cmd2(cmd1);
+    rd::StringCommand cmd1("testString1", myString);
+    rd::StringCommand cmd2(cmd1);
 
 //test name
     ASSERT_EQ("testString1", cmd1.name());
@@ -115,7 +121,7 @@ TEST(CommandsTests, TestStringCommand_1)
     ASSERT_EQ("UNDEFINED", cmd1.value());
     ASSERT_EQ("", err);
 
-    StringCommand cmd3("mine", myString3, 6);
+    rd::StringCommand cmd3("mine", myString3, 6);
     res = cmd3.execute("test2", err);
     ASSERT_TRUE(res);
     ASSERT_EQ("test2", cmd3.value());
@@ -125,14 +131,15 @@ TEST(CommandsTests, TestStringCommand_1)
     ASSERT_FALSE(res);
     ASSERT_EQ("test2", cmd3.value());
     ASSERT_EQ("Input size too big", err);
-
 }
+
+};
 
 TEST(CommandsTests, TestOnOffommand_1)
 {
     bool test = false;
-    OnOffCommand cmd1("testOnOff", test);
-    OnOffCommand cmd2(cmd1);
+    rd::OnOffCommand cmd1("testOnOff", test);
+    rd::OnOffCommand cmd2(cmd1);
 
 // name
     ASSERT_EQ("testOnOff", cmd1.name());
@@ -166,6 +173,8 @@ static bool return_true(){
     return true;
 }
 
+namespace rd{
+
 class TestAction : public ActionCommand{
     public:
     TestAction(const TestAction & other) : ActionCommand(other){}
@@ -177,10 +186,12 @@ protected:
     virtual bool doAction(){return return_true();}
 };
 
+};
+
 TEST(CommandsTests, TestActionCommand_1)
 {
-    TestAction cmd1("testAction");
-    TestAction cmd2(cmd1);
+    rd::TestAction cmd1("testAction");
+    rd::TestAction cmd2(cmd1);
 
 // name
     ASSERT_EQ("testAction", cmd1.name());
@@ -204,6 +215,8 @@ TEST(CommandsTests, TestActionCommand_1)
     ASSERT_EQ("UNDEFINED", cmd1.value());
     ASSERT_EQ("", err);
 }
+
+namespace rd{
 
 class TestNumber: public NumberCommand{
     public:
@@ -232,10 +245,12 @@ private:
     std::vector<double> number;
 };
 
+};
+
 TEST(CommandsTests, TestNumberCommand_1)
 {
-    TestNumber cmd1("testNumber");
-    TestNumber cmd2(cmd1);
+    rd::TestNumber cmd1("testNumber");
+    rd::TestNumber cmd2(cmd1);
 
 // name
     ASSERT_EQ("testNumber", cmd1.name());

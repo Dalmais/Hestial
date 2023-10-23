@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+namespace rd{
+
 class Command{
 public:
     Command(const Command & other) : m_name(other.m_name){}
@@ -144,5 +146,6 @@ protected:
 
 };
 
+}; //namespace rd
 
 #endif // _COMMANDS_
