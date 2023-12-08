@@ -20,6 +20,7 @@ private:
     static const double DISK_USAGE_THRESHOLD; // Uppercase static constant
 
     void cleanOldLogFiles();
+    void logToFile(const std::string& message);
     void logToTcp(const std::string& message);
 };
 
