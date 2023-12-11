@@ -1,10 +1,10 @@
-#include "UDPSocket.h"
+#include "udpsocket.h"
 #include <iostream>
 #include <cstring>
 #include <arpa/inet.h>
 #include <unistd.h>
 
-UDPSocket::UDPSocket() : socket_fd(-1) {}
+UDPSocket::UDPSocket() : Socket(), socket_fd(-1) {}
 
 UDPSocket::~UDPSocket() {
     close();

@@ -3,8 +3,8 @@
 
 class Socket {
 public:
-    Socket();
-    virtual ~Socket();
+    Socket(){}
+    virtual ~Socket(){}
 
     virtual bool create() = 0;
     virtual bool bind(int port) = 0;

@@ -1,10 +1,10 @@
-#include "TCPSocket.h"
+#include "tcpsocket.h"
 #include <iostream>
 #include <cstring>
 #include <arpa/inet.h>
 #include <unistd.h>
 
-TCPSocket::TCPSocket() : socket_fd(-1) {}
+TCPSocket::TCPSocket() : Socket(), socket_fd(-1) {}
 
 TCPSocket::~TCPSocket() {
     close();
