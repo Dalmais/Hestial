@@ -30,15 +30,31 @@ bool TCPSocket::bind(int port) {
 }
 
 bool TCPSocket::send(const char* data, int length) {
-    // Implement sending data via TCP socket
-    // Use send() function
-    return false;
+    if (socket_fd == -1) {
+        return false;
+    }
+
+    int sent_bytes = send(socket_fd, data, length, 0);
+
+    return (sent_bytes == length);
 }
 
 bool TCPSocket::receive(char* buffer, int length) {
-    // Implement receiving data via TCP socket
-    // Use recv() function
-    return false;
+    if (socket_fd == -1) {
+        return false;
+    }
+
+    int received_bytes = recv(socket_fd, buffer, length, 0);
+
+    if (received_bytes > 0) {
+        return true;
+    } else if (received_bytes == 0) {
+        // Connection closed by the remote side
+        return false;
+    } else {
+        // Handle error (received_bytes == -1)
+        return false;
+    }
 }
 
 void TCPSocket::close() {
