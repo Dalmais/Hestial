@@ -1,0 +1,11 @@
+# Housebot
+This document presents the expected behavior that we want.
+The strategy to use in order to code.
+
+## Behavior
+- Temperature
+- Humidity
+- Quality of the air
+
+## Implementation strategy
+1- Create  a  build  of the system
