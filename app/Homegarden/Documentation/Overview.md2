@@ -8,4 +8,8 @@ The strategy to use in order to code.
 - Quality of the air
 
 ## Implementation strategy
-1- Create  a  build  of the system
+1- Create a build of the system
+2- Install a database 
+3- Get the data and store them in the database
+4- send data to a cloud
+5- Visualize the data
