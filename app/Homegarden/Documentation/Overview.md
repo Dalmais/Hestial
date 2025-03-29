@@ -1,12 +1,14 @@
 # Housebot
-This document presents the expected behavior that we want.
+This document presents the expected behaviour that we want.
 The strategy to use in order to code.
 
-## Behavior
-- Temperature
-- Humidity
+## Behaviour
+- Temperature & humidity (DHT22)
+  - https://www.didel.com/DHT22.pdf
+  - https://arduinogetstarted.com/tutorials/arduino-dht22
 - Quality of the air (MQ135)
-  - ref: https://www.raspberrypi.com/news/track-air-quality-anywhere-with-raspberry-pi/
+  - https://www.raspberrypi.com/news/track-air-quality-anywhere-with-raspberry-pi/
+  - https://github.com/Bobbo117/MQ135-Air-Quality-Sensor
 - Powered by solar system and battery (powerbank)
 
 ## Implementation strategy
