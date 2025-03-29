@@ -1,4 +1,5 @@
 # Housebot
+![Image](images/garden_large.png "homegarden")
 This document presents the expected behaviour that we want.
 The strategy to use in order to code.
 
