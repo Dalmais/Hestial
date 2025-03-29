@@ -1,4 +1,4 @@
-⁸# Housebot
+# Housebot
 ![Image](images/garden_large.png "homegarden")
 This document presents the expected behaviour that we want.
 The strategy to use in order to code.
@@ -15,13 +15,13 @@ The strategy to use in order to code.
 ## Implementation strategy
 1. Create a build of the system
 2. Database 
-  * Select a database 
-  * Install the database 
-  * Configure the database 
+   * Select a database 
+   * Install the database 
+   * Configure the database 
 3. Get the data and store them in the database
 4. Send data to a cloud
-  * Select a cloud
-  * Configure the cloud/services
-  * Synchronize the database with devices
+   * Select a cloud
+   * Configure the cloud/services
+   * Synchronize the database with devices
 5. Visualize the data
-  * Find a tool
+   * Find a tool
