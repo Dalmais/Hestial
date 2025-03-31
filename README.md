@@ -1,7 +1,7 @@
 :postal_horn: Homebot
 ========
 Next house management.
-![Image](Documentation/images/header.png "header")
+![Image](Documentation/Images/header.png "header")
 <div align="center">
     <a href="https://github.com/Dalmais/Housebot/releases">
       <img src="https://img.shields.io/github/release/Dalmais/Housebot.svg" alt="Latest Stable Release" />
