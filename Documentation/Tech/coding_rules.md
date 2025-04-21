@@ -1,6 +1,5 @@
 ### **C++ Code Style Template**
 
-```markdown
 # 🧑‍💻 C++ Code Style Guide
 
 This document defines the conventions to follow for clean, readable, and maintainable C++ code.
@@ -14,40 +13,42 @@ This document defines the conventions to follow for clean, readable, and maintai
 ## 🔠 Naming Conventions
 - **Class names** should be written in **CamelCase**, starting with a capital letter. Example: `SensorManager`
 - **Function names** should use **camelCase**, starting with a lowercase letter. Example: `initializeSensors()`
-- **Variable names** should be written in **snake_case** prefixed with m_. Example: `m_sensor_temperature`
+- **Variable names** should be written in **camelCase** prefixed with m_. Example: `m_temperatureSensor`
 
 ## 🚫 Best Practices
 - **Avoid global variables** whenever possible.
+- **Avoid goto** and prefer exception
 - Always **initialize variables** before use.
 - Prefer **smart pointers** (`std::unique_ptr`, `std::shared_ptr`) over raw pointers.
 - Follow the **Single Responsibility Principle**: each function or method should have a clearly defined and limited purpose.
+- Always declare a virtual destructor in inherited class
 
 ## ⚡ Optimization
 - Prefer **references (`const&`)** for passing large objects to avoid unnecessary copies.
 - Avoid excessive use of `new` and `delete`; prefer STL containers like `std::vector`, `std::map`, etc.
 
 ## 💻 Examples
-### 1. **Class**:
+### 1. **Class style**:
 ```cpp
-class SensorManager {
+class SensorManager : public Manager {
 public:
     SensorManager();
-    ~SensorManager();
+    virtual ~SensorManager();
 
     void readTemperature();
     void displayResults();
 
-private:_
+private:
     double m_temperature;
 };
 ```
 
-### 2. **Implementation of `readTemperature()`**:
+### 2. **Implementation style**:
 ```cpp
 #include "SensorManager.h"
 #include <iostream>
 
-SensorManager::SensorManager() : temperature(0.0) {}
+SensorManager::SensorManager() : Manager(), temperature(0.0) {}
 
 SensorManager::~SensorManager() {}
 
@@ -61,17 +62,4 @@ void SensorManager::readTemperature() {
     // Debug output
     std::cout << "Temperature read: " << temperature << "°C" << std::endl;
 }
-```cpp
-class SensorManager {
-public:
-    SensorManager();
-    ~SensorManager();
-
-    void readTemperature();
-    void displayResults();
-
-private:
-    double temperature;
-};
-```
 ```
