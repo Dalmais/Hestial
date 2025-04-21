@@ -1,5 +1,3 @@
-### **C++ Code Style Template**
-
 # 🧑‍💻 C++ Code Style Guide
 
 This document defines the conventions to follow for clean, readable, and maintainable C++ code.
