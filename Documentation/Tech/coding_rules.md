@@ -55,6 +55,8 @@ void SensorManager::readTemperature() {
     m_temperature = TemperatureSensor::getInstance().getValue();
 
     // Debug output
-    std::cout << "Temperature read: " << m_temperature << "°C" << std::endl;
+    if(m_verbose){
+      std::cout << "Temperature read: " << m_temperature << "°C" << std::endl;
+    }
 }
 ```
