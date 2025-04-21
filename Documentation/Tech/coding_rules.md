@@ -20,6 +20,7 @@ This document defines the conventions to follow for clean, readable, and maintai
 - Prefer **smart pointers** (`std::unique_ptr`, `std::shared_ptr`) over raw pointers.
 - Follow the **Single Responsibility Principle**: each function or method should have a clearly defined and limited purpose.
 - Always declare a virtual destructor in inherited class
+- Include local path first then system path (ex: "SensorManager.h" before <ioctl.h>) 
 
 ## ⚡ Optimization
 - Prefer **references (`const&`)** for passing large objects to avoid unnecessary copies.
@@ -44,6 +45,8 @@ private:
 ### 2. **Implementation style**:
 ```cpp
 #include "SensorManager.h"
+#include "TemperatureManager.h"
+
 #include <iostream>
 
 SensorManager::SensorManager() : Manager(), m_temperature(0.0) {}
