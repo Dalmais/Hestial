@@ -46,18 +46,15 @@ private:
 #include "SensorManager.h"
 #include <iostream>
 
-SensorManager::SensorManager() : Manager(), temperature(0.0) {}
+SensorManager::SensorManager() : Manager(), m_temperature(0.0) {}
 
 SensorManager::~SensorManager() {}
 
 void SensorManager::readTemperature() {
     // Simulated sensor reading
-    double raw_sensor_value = 25.3; // Replace with actual sensor reading logic
-
-    // Store the value in the member variable
-    temperature = raw_sensor_value;
+    m_temperature = TemperatureSensor::getInstance().getValue();
 
     // Debug output
-    std::cout << "Temperature read: " << temperature << "°C" << std::endl;
+    std::cout << "Temperature read: " << m_temperature << "°C" << std::endl;
 }
 ```
