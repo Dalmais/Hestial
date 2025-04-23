@@ -6,6 +6,8 @@
 #include <sstream>
 #include <unistd.h>
 
+namespace rd{
+
 Logger::~Logger() {
     if (m_logFile.is_open()) {
         m_logFile.close();
@@ -83,3 +85,5 @@ std::string Logger::currentTimestamp() {
     std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", timeinfo);
     return std::string(buffer);
 }
+
+} // end of namespace rd

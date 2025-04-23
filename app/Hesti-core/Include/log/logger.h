@@ -5,6 +5,8 @@
 #include <mutex>
 #include <netinet/in.h>
 
+namespace rd{
+
 class Logger {
 public:
     static Logger& getInstance(){
@@ -31,3 +33,5 @@ private:
     bool m_tcpEnabled = false;
     int m_tcpSocket = -1;
 };
+
+} // end of namespace rd
