@@ -1,60 +1,90 @@
-#include "logger.hpp"
+#include "logger.h"
 
-#include <chrono>
-#include <ctime>
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
+#include <cstring>
+#include <chrono>
+#include <ctime>
 
-namespace rd{
+namespace rd {
+
+Logger::Logger() :
+    m_running(false),
+    m_serverSocket(-1){
+}
 
 Logger::~Logger() {
+    m_running = false;
+
+    if (m_supervisorThread.joinable()) {
+        m_supervisorThread.join();
+    }
+
+    if (m_serverSocket != -1) {
+        close(m_serverSocket);
+    }
+
+    std::lock_guard<std::mutex> lock(m_clientsMutex);
+    for (int fd : m_clients) {
+        close(fd);
+    }
+
     if (m_logFile.is_open()) {
         m_logFile.close();
     }
-    if (m_tcpSocket != -1) {
-        close(m_tcpSocket);
-    }
 }
 
-Logger& Logger::getInstance() {
-    static Logger instance;
-    return instance;
-}
-
-void Logger::init(const std::string& filePath, bool useTcp) {
+void Logger::init(const std::string& filePath, bool enableTcp) {
     std::lock_guard<std::mutex> lock(m_logMutex);
     m_logFile.open(filePath, std::ios::app);
-    m_tcpEnabled = useTcp;
 
-    if (m_tcpEnabled) {
-        m_tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
-        if (m_tcpSocket < 0) {
-            std::cerr << "⚠️ Failed to create TCP socket\n";
-            m_tcpEnabled = false;
-            return;
-        }
-
-        sockaddr_in server{};
-        server.sin_family = AF_INET;
-        server.sin_port = htons(45678);
-        server.sin_addr.s_addr = htonl(INADDR_LOOPBACK);  // 127.0.0.1
-
-        if (connect(m_tcpSocket, (struct sockaddr*)&server, sizeof(server)) < 0) {
-            std::cerr << "⚠️ Could not connect to TCP log server\n";
-            close(m_tcpSocket);
-            m_tcpSocket = -1;
-            m_tcpEnabled = false;
-        }
+    if (enableTcp) {
+        supervisor();  // Lancer automatiquement la supervision
     }
 }
 
-void Logger::info(const std::string& message) {
-    log("INFO", message);
+void Logger::supervisor() {
+    if (m_running) return;
+
+    m_running = true;
+    m_supervisorThread = std::thread(&Logger::acceptLoop, this);
 }
 
-void Logger::error(const std::string& message) {
-    log("ERROR", message);
+void Logger::acceptLoop() {
+    m_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (m_serverSocket < 0) {
+        std::cerr << "[Logger] Failed to create TCP socket.\n";
+        m_running = false;
+        return;
+    }
+
+    sockaddr_in server{};
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = INADDR_ANY;
+    server.sin_port = htons(45678);
+
+    if (bind(m_serverSocket, (struct sockaddr*)&server, sizeof(server)) < 0) {
+        std::cerr << "[Logger] Bind failed.\n";
+        close(m_serverSocket);
+        m_serverSocket = -1;
+        m_running = false;
+        return;
+    }
+
+    listen(m_serverSocket, 5);
+    std::cout << "[Logger] Supervisor listening on port 45678\n";
+
+    while (m_running) {
+        sockaddr_in clientAddr{};
+        socklen_t clientLen = sizeof(clientAddr);
+        int clientSocket = accept(m_serverSocket, (struct sockaddr*)&clientAddr, &clientLen);
+        if (clientSocket < 0) continue;
+
+        std::lock_guard<std::mutex> lock(m_clientsMutex);
+        m_clients.push_back(clientSocket);
+        std::cout << "[Logger] Client connected.\n";
+    }
 }
 
 void Logger::log(const std::string& level, const std::string& message) {
@@ -66,14 +96,29 @@ void Logger::log(const std::string& level, const std::string& message) {
         m_logFile << fullMessage << std::endl;
     }
 
-    if (m_tcpEnabled && m_tcpSocket != -1) {
-        sendToTcp(fullMessage);
+    broadcast(fullMessage + "\n");
+}
+
+void Logger::broadcast(const std::string& message) {
+    std::lock_guard<std::mutex> lock(m_clientsMutex);
+
+    for (auto it = m_clients.begin(); it != m_clients.end();) {
+        ssize_t sent = send(*it, message.c_str(), message.length(), 0);
+        if (sent < 0) {
+            close(*it);
+            it = m_clients.erase(it);
+        } else {
+            ++it;
+        }
     }
 }
 
-void Logger::sendToTcp(const std::string& message) {
-    std::string data = message + "\n";
-    send(m_tcpSocket, data.c_str(), data.size(), 0);
+void Logger::info(const std::string& message) {
+    log("INFO", message);
+}
+
+void Logger::error(const std::string& message) {
+    log("ERROR", message);
 }
 
 std::string Logger::currentTimestamp() {

@@ -8,6 +8,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(SRCS 
     ${PROJECT_SOURCE_DIR}/Src/Log/main.cpp
-    )
+)
+
+target_include_directories(hesti-core PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 
 add_library(hestiacore ${SRCS})
